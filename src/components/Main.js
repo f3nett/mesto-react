@@ -16,7 +16,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
                 <img
                     className="profile__avatar"
                     src={currentUser.avatar}
-                    alt="Аватар"
+                    alt="Аватар пользователя."
                     onClick = {onEditAvatar}
                 />
                 </div>
@@ -31,7 +31,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
                     <img
                         className="profile__edit-icon"
                         src={logo}
-                        alt="Редактировать"
+                        alt="Редактировать информацию о пользователе."
                     />
                     </button>
                 </div>
@@ -46,7 +46,7 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike,
                 <img
                 className="profile__add-icon"
                 src={add_button}
-                alt="Добавить"
+                alt="Добавить новое изображение."
                 />
             </button>
             </section>

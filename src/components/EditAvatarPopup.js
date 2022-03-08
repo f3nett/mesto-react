@@ -1,16 +1,16 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
+import useFormAndValidation from '../hooks/useFormAndValidation';
 
 function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, loadState}) {
 
     const avatarRef = React.useRef();
-    const [avatarValid, setAvatarValid] = React.useState(false);
-    const [avatarError, setAvatarError] = React.useState('');
+    const {handleChange, errors, isValid, resetForm} = useFormAndValidation({defaultValues: {avatar: ''}, defaultValid: false});
 
-    function handleChangeAvatar(e) {
-        setAvatarValid(e.target.validity.valid);
-        setAvatarError(e.target.validationMessage);
-    }
+    React.useEffect(() => {
+        resetForm();
+        avatarRef.current.value = '';
+    }, [isOpen]);
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -21,22 +21,22 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, loadState}) {
 
     return (
         <PopupWithForm name = "avatar" title = "Обновить аватар" submitText = "Сохранить" 
-        formValid = {avatarValid}
+        formValid = {isValid}
         loadState = {loadState}
         isOpen = {isOpen}
         onClose = {onClose}
         onSubmit = {handleSubmit}>
             <input
             id = "input_avatar"
-            className = {`popup__input popup__input_type_avatar-link ${avatarError == '' ? '': 'popup__input-error'}`}
+            className = {`popup__input popup__input_type_avatar-link ${errors['avatar'] == '' ? '': 'popup__input-error'}`}
             type = "url"
             name = "avatar"
             required
             placeholder = "https://somewebsite.com/someimage.jpg"
             ref = {avatarRef}
-            onChange = {handleChangeAvatar}
+            onChange = {handleChange}
             />
-            <span id = "input_avatar-error" className = {`popup__error ${avatarError == '' ? '' : 'popup__error_active'}`}>{avatarError}</span>
+            <span id = "input_avatar-error" className = {`popup__error ${errors['avatar'] == '' ? '' : 'popup__error_active'}`}>{errors['avatar']}</span>
         </PopupWithForm>
     )
 }

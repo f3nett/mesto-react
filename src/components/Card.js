@@ -30,7 +30,7 @@ function Card({card, onCardClick, onCardLike, onCardDelete}) {
 
     return (
         <article className="place-card">
-            <img className="place-card__image" src = {card.link}
+            <img className="place-card__image" src = {card.link} alt = {card.name + '.'}
             onClick = {handleClick}/>
             <button
             className={cardDeleteButtonClassName}
