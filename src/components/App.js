@@ -20,6 +20,7 @@ function App() {
   const [currentUser, setCurrentUser] = React.useState({id: null, name: '', about: '', avatar: ''});
   const [cards, setCards] = React.useState([]);
   const [removedCard, setRemovedCard] = React.useState('');
+  const [loadState, setLoadState] = React.useState(false);
   
   React.useEffect(() => {
       Promise.all([api.getUser(), api.getCards()])
@@ -35,6 +36,7 @@ function App() {
   function handleUpdateUser(currentUser) {
     api.setUserData(currentUser)
       .then((userData) => {
+        setLoadState(true);
         setCurrentUser(userData);
         console.log('Информация о пользователе обновлена:', userData);
         closeAllPopups();
@@ -42,11 +44,13 @@ function App() {
       .catch(err => {
         console.log(err);
       })
+      .finally(() => setLoadState(false))
   }
 
   function handleUpdateAvatar(avatar) {
     api.setUserPhoto(avatar)
       .then((newUserData) => {
+        setLoadState(true);
         setCurrentUser(newUserData);
         console.log('Установлен новый аватар:', newUserData.avatar);
         closeAllPopups();
@@ -54,11 +58,13 @@ function App() {
       .catch(err => {
         console.log(err);
       })
+      .finally(() => setLoadState(false))
   }
 
   function handleAddPlaceSubmit(newCard) {
     api.postCard(newCard)
     .then(res => {
+      setLoadState(true);
       setCards([res, ...cards]);
       console.log('Добавлена новая карточка:', res);
       closeAllPopups();
@@ -66,6 +72,7 @@ function App() {
     .catch(err => {
       console.log(err);
     })
+    .finally(() => setLoadState(false))
   }
 
   function handleCardLike(card) {
@@ -149,9 +156,9 @@ function App() {
         <Footer />
       </div>
       <ImagePopup card = {selectedCard} onClose = {closeAllPopups}/>
-      <EditProfilePopup isOpen = {isEditProfilePopupOpen} onClose = {closeAllPopups} onUpdateUser = {handleUpdateUser}/>
-      <AddPlacePopup isOpen = {isAddPlacePopupOpen} onClose = {closeAllPopups} onUpdatePlace = {handleAddPlaceSubmit}/>
-      <EditAvatarPopup isOpen = {isEditAvatarPopupOpen} onClose = {closeAllPopups} onUpdateAvatar = {handleUpdateAvatar}/>
+      <EditProfilePopup isOpen = {isEditProfilePopupOpen} onClose = {closeAllPopups} onUpdateUser = {handleUpdateUser} loadState = {loadState}/>
+      <AddPlacePopup isOpen = {isAddPlacePopupOpen} onClose = {closeAllPopups} onUpdatePlace = {handleAddPlaceSubmit} loadState = {loadState}/>
+      <EditAvatarPopup isOpen = {isEditAvatarPopupOpen} onClose = {closeAllPopups} onUpdateAvatar = {handleUpdateAvatar} loadState = {loadState}/>
       <ConfirmPopup isOpen = {isConfirmPopupOpen} onClose = {closeAllPopups} onSubmit = {handleConfirmDelete} confirmObject = {removedCard}/>
     </div>
   </CurrentUserContext.Provider>

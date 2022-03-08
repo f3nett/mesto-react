@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-function PopupWithForm({name, title, submitText, isOpen, onClose, children, onSubmit, formValid}) {
+function PopupWithForm({name, title, submitText, isOpen, onClose, children, onSubmit, formValid, loadState}) {
     return (
     <div className={`popup popup_type_${name} popup_opacity_strong ${isOpen ? 'popup_opened' : ''}`}>
         <div className={`popup__container popup__container_type_${name}`}>
@@ -18,7 +17,7 @@ function PopupWithForm({name, title, submitText, isOpen, onClose, children, onSu
                     className = {`popup__submit-button button button_opacity_lite ${formValid ? '' : 'popup__submit-button_inactive'}`}
                     type = "submit"
                 >
-                    {submitText}
+                    {loadState ? 'Сохранение...' : submitText}
                 </button>
             </form>
         </div>
