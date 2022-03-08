@@ -2,28 +2,11 @@ import React from 'react';
 import Card from './Card';
 import logo from '../images/logo/edit_icon.svg';
 import add_button from '../images/logo/add_button.svg';
-import api from '../utils/api';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-function Main(props) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onCardLike, onCardDelete, cards}) {
 
-    const [userName, setUserName] = React.useState('');
-    const [userDescription, setUserDescription] = React.useState('');
-    const [userAvatar, setUserAvatar] = React.useState('');
-    const [cards, setCards] = React.useState([]);
-
-
-    React.useEffect(() => {
-        Promise.all([api.getUser(), api.getCards()])
-        .then(([userData, cardsData]) => {
-            setUserName(userData.name);
-            setUserDescription(userData.about);
-            setUserAvatar(userData.avatar);
-            setCards(cardsData);
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }, []);
+    const currentUser = React.useContext(CurrentUserContext);
 
     return (
         <main className="content">
@@ -32,18 +15,18 @@ function Main(props) {
                 <div className="profile__avatar-area">
                 <img
                     className="profile__avatar"
-                    src={userAvatar}
+                    src={currentUser.avatar}
                     alt="Аватар"
-                    onClick = {props.onEditAvatar}
+                    onClick = {onEditAvatar}
                 />
                 </div>
                 <div className="profile__info">
                 <div className="profile__name-section">
-                    <h1 className="profile__name">{userName}</h1>
+                    <h1 className="profile__name">{currentUser.name}</h1>
                     <button
                     className="profile__edit-button button button_opacity_medium"
                     type="button"
-                    onClick = {props.onEditProfile}
+                    onClick = {onEditProfile}
                     >
                     <img
                         className="profile__edit-icon"
@@ -52,13 +35,13 @@ function Main(props) {
                     />
                     </button>
                 </div>
-                <p className="profile__description">{userDescription}</p>
+                <p className="profile__description">{currentUser.about}</p>
                 </div>
             </div>
             <button
                 className="profile__add-button button button_opacity_medium"
                 type="button"
-                onClick = {props.onAddPlace}
+                onClick = {onAddPlace}
             >
                 <img
                 className="profile__add-icon"
@@ -68,7 +51,7 @@ function Main(props) {
             </button>
             </section>
             <section className="places">
-                {cards.map((card) => <Card key = {card._id} card={card} onCardClick = {props.onCardClick}/>)}
+                {cards.map((card) => <Card key = {card._id} card={card} onCardClick = {onCardClick} onCardLike = {onCardLike} onCardDelete = {onCardDelete}/>)}
             </section>
       </main>
     )
